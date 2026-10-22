@@ -45,6 +45,3 @@ const startServer = async () => {
 };
 
 startServer();
-// ademolabusayo19_db_user;
-// BnrokNc8EnqcE1PA;
-// mongodb+srv://ademolabusayo19_db_user:BnrokNc8EnqcE1PA@cluster0.5l6umot.mongodb.net/
