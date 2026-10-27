@@ -17,7 +17,7 @@ function App() {
         <Route path="/" element={<Coverpage />} />
         <Route path="/tasks" element={<MyTask />} />
         <Route path="/new" element={<NewTask />} />
-        <Route path="/edit" element={<EditTasks />} />
+        <Route path="/edit/:id" element={<EditTasks />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
@@ -25,3 +25,5 @@ function App() {
 }
 
 export default App;
+
+// The user clicks

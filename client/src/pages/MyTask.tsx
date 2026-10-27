@@ -1,28 +1,31 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FiEdit, FiTrash2, FiPlus } from "react-icons/fi";
+
 import type { Task } from "../types/Task";
+import { getTasks, deleteTask } from "../api";
 
 const MyTask = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  // FETCH TASKS FROM MONGODB USING AXIOS
   // FETCH TASKS FROM MONGODB
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const response = await fetch("http://localhost:6741/api/tasks");
+        setLoading(true);
+        setError("");
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch tasks");
-        }
+        const data = await getTasks();
 
-        const data: Task[] = await response.json();
         setTasks(data);
       } catch (error) {
-        console.error(error);
-        setError("Unable to load tasks");
+        console.error("Error loading tasks:", error);
+        setError(
+          error instanceof Error ? error.message : "Unable to load tasks",
+        );
       } finally {
         setLoading(false);
       }
@@ -31,8 +34,8 @@ const MyTask = () => {
     fetchTasks();
   }, []);
 
-  // DELETE TASK FROM MONGODB
-  const deleteTask = async (id: string) => {
+  // DELETE TASK FROM MONGODB USING AXIOS
+  const handleDeleteTask = async (id: string) => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this task?",
     );
@@ -40,13 +43,7 @@ const MyTask = () => {
     if (!confirmDelete) return;
 
     try {
-      const response = await fetch(`http://localhost:6741/api/tasks/${id}`, {
-        method: "DELETE",
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to delete task");
-      }
+      await deleteTask(id);
 
       setTasks((previousTasks) =>
         previousTasks.filter((task) => task._id !== id),
@@ -119,7 +116,7 @@ const MyTask = () => {
                     {/* DELETE */}
                     <button
                       type="button"
-                      onClick={() => deleteTask(task._id)}
+                      onClick={() => handleDeleteTask(task._id)}
                       className="flex cursor-pointer items-center gap-2 rounded-md border border-purple-500 px-5 py-2 text-purple-600 transition hover:bg-purple-50"
                     >
                       <FiTrash2 size={17} />

@@ -5,16 +5,18 @@ import cors from "cors";
 import "dotenv/config";
 import taskRouter from "./routes/taskRoutes";
 
-const app = express(); // Used to start up the Express server
+const app = express(); // used to start up the server in express
 
-const PORT = 6741;
-// CORS: only the Client url address my this API
+const PORT = process.env.PORT || 6741;
+
+// CORS: only the Client url address may call this API
 app.use(
-  cors({ origin: process.env.CLIENT_URL || "http://http://localhost:5173" }),
+  cors({
+    origin: process.env.CLIENT_URL || "http://localhost:5173",
+  }),
 );
 
-// MIDDLEWARE
-// Allows Express to receive and understand JSON data from Postman
+// Converts every request to JSON (JavaScript format)
 app.use(express.json());
 
 // Every endpoint starting with /api/tasks is handled by taskRouter
@@ -23,17 +25,17 @@ app.use("/api/tasks", taskRouter);
 const startServer = async () => {
   try {
     // GET MONGODB CONNECTION STRING
-    const mongoURI = process.env.MONGO_URI;
+    const mongoURL = process.env.MONGO_URL;
 
     // CHECK IF CONNECTION STRING EXISTS
-    if (!mongoURI) {
-      throw new Error("MONGO_URI is missing from .env");
+    if (!mongoURL) {
+      throw new Error("MONGO_URL is missing");
     }
 
     // CONNECT TO MONGODB
-    await mongoose.connect(mongoURI);
+    await mongoose.connect(mongoURL);
 
-    console.log("MongoDB connected successfully");
+    console.log("Database connected successfully");
 
     // START EXPRESS SERVER
     app.listen(PORT, () => {

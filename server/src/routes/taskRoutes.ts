@@ -10,7 +10,7 @@ import {
 } from "../controllers/taskController";
 import { validateId } from "../middleware/validated";
 
-// All paths here start with /api/task (see app.ts)
+// All paths here start with /api/tasks (see app.ts)
 // This follows RESTAPI
 
 const router = Router();
