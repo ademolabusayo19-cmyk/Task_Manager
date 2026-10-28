@@ -5,7 +5,7 @@ import type { Task, TaskInput } from "./types";
 
 // CONNECT FRONTEND TO BACKEND
 const api = axios.create({
-  baseURL: "http://localhost:6741/api",
+  baseURL: "https://task-manager-xjzk.onrender.com/api",
 });
 
 // CREATE TASK
